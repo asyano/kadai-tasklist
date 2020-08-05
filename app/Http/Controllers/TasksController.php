@@ -91,8 +91,8 @@ class TasksController extends Controller
         }
         else
         {
-                // トップページへリダイレクトさせる
-                 return view('welcome');
+                 // トップページへリダイレクトさせる
+                return redirect('/');
         }
        
     }
@@ -103,10 +103,18 @@ class TasksController extends Controller
         // idの値でメッセージを検索して取得
         $task = Task::findOrFail($id);
 
+ if (\Auth::id()  == $task->user_id) {
+     
         // メッセージ編集ビューでそれを表示
         return view('tasks.edit', [
             'task' => $task,
         ]);
+ }
+        else
+        {
+                 // トップページへリダイレクトさせる
+                return redirect('/');
+        }
     }
 
     // putまたはpatchでmessages/idにアクセスされた場合の「更新処理」
@@ -120,6 +128,8 @@ class TasksController extends Controller
 
         // idの値でメッセージを検索して取得
         $task = Task::findOrFail($id);
+        
+         if (\Auth::id()  == $task->user_id) {
         // メッセージを更新
         $task -> status = $request->status;
         $task->content = $request->content;
@@ -127,6 +137,13 @@ class TasksController extends Controller
 
         // トップページへリダイレクトさせる
         return redirect('/');
+        
+         }
+        else
+        {
+                 // トップページへリダイレクトさせる
+                return redirect('/');
+        }
     }
 
     // deleteでmessages/idにアクセスされた場合の「削除処理」
@@ -134,10 +151,19 @@ class TasksController extends Controller
     {
         // idの値でメッセージを検索して取得
         $task = Task::findOrFail($id);
+        
+           if (\Auth::id()  == $task->user_id) {
         // メッセージを削除
         $task->delete();
 
         // トップページへリダイレクトさせる
         return redirect('/');
+        
+           }
+        else
+        {
+                 // トップページへリダイレクトさせる
+                return redirect('/');
+        }
     }
 }
